@@ -1,4 +1,4 @@
-<!-- Versi 5.1 - Optimized Premium Edition with Triple Icon Fallback -->
+<!-- Versi 5 - Optimized Premium Edition -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -20,6 +20,13 @@
     <meta name="description" content="Kumpulan website top-up game terpercaya seperti Codashop, UniPin, Itemku, Dunia Games, dan VCGamers. Cari harga termurah di sini.">
     <meta name="keywords" content="topup game, top-up game, topup mobile legends, topup free fire, topup genshin impact, codashop, unipin, itemku">
     <meta name="robots" content="index, follow">
+
+    <!-- Open Graph & Twitter Card tetap sama seperti V4 -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Toko Topup Game | List Website Topup Game Terpercaya">
+    <meta property="og:description" content="Temukan tempat top-up game favoritmu dengan mudah dan aman.">
+    <meta property="og:url" content="https://tokotopupgame.github.io/">
+    <meta property="og:image" content="https://tokotopupgame.github.io/og-image.jpg">
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     
@@ -91,6 +98,7 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-dim);
+            transition: color 0.3s;
         }
 
         .search-input {
@@ -108,6 +116,11 @@
         .search-input:focus {
             border-color: var(--accent-color);
             box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+            background: #1c233a;
+        }
+
+        .search-input:focus + svg {
+            color: var(--accent-color);
         }
 
         .stats-info {
@@ -120,10 +133,21 @@
             color: var(--text-dim);
         }
 
-        .list { display: grid; gap: 12px; width: 100%; }
+        .list {
+            display: grid;
+            gap: 12px;
+            width: 100%;
+        }
 
-        .item { opacity: 0; transform: translateY(10px); animation: fadeIn 0.4s forwards; }
-        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+        .item {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.4s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .item a {
             display: flex;
@@ -141,8 +165,9 @@
 
         .item a:hover {
             border-color: var(--accent-color);
-            transform: scale(1.02);
             background: #1e253d;
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
 
         .item-icon {
@@ -155,31 +180,71 @@
             justify-content: center;
             overflow: hidden;
             border: 1px solid var(--border-color);
-            flex-shrink: 0;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--accent-color);
         }
 
-        .item-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .item-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-        .item-name { flex: 1; text-align: left; font-size: 1.05rem; }
+        .item-name {
+            flex: 1;
+            text-align: left;
+            font-size: 1.05rem;
+        }
 
-        .arrow { color: var(--text-dim); opacity: 0.5; }
+        .arrow {
+            color: var(--text-dim);
+            opacity: 0.5;
+            transition: transform 0.2s, color 0.2s;
+        }
 
-        mark { background: rgba(56, 189, 248, 0.2); color: var(--accent-color); border-radius: 4px; padding: 0 2px; }
+        .item a:hover .arrow {
+            transform: translateX(3px);
+            color: var(--accent-color);
+            opacity: 1;
+        }
 
-        .no-result { padding: 50px 20px; color: var(--text-dim); background: var(--card-bg); border-radius: 16px; border: 1px dashed var(--border-color); }
+        mark {
+            background: rgba(56, 189, 248, 0.2);
+            color: var(--accent-color);
+            border-radius: 4px;
+            padding: 0 2px;
+        }
 
-        .skeleton { height: 74px; background: var(--card-bg); border-radius: 14px; position: relative; overflow: hidden; }
+        .no-result {
+            padding: 50px 20px;
+            color: var(--text-dim);
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px dashed var(--border-color);
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            height: 74px;
+            background: var(--card-bg);
+            border-radius: 14px;
+            position: relative;
+            overflow: hidden;
+        }
         .skeleton::after {
-            content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+            content: "";
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
             animation: loading 1.5s infinite;
         }
-        @keyframes loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
 
-        @media (max-width: 480px) { h1 { font-size: 1.8rem; } }
+        @media (max-width: 480px) {
+            h1 { font-size: 1.8rem; }
+            .search-input { padding: 15px 15px 15px 48px; }
+        }
     </style>
 </head>
 <body>
@@ -204,6 +269,7 @@
         </div>
 
         <div class="list" id="siteList">
+            <!-- Skeleton Loader -->
             <div class="skeleton"></div>
             <div class="skeleton"></div>
             <div class="skeleton"></div>
@@ -222,20 +288,16 @@
                 const link = line.slice(commaIndex + 1).trim();
                 return (name && link) ? { name, link } : null;
             }).filter(Boolean);
+
+            // Sorting A-Z berdasarkan Nama
             return data.sort((a, b) => a.name.localeCompare(b.name));
         }
 
-        // Fungsi Fallback Ikon (DuckDuckGo -> FaviconAPI -> Initial)
-        function handleImageError(img, initial, domain) {
-            // Jika DuckDuckGo gagal, coba FaviconAPI
-            if (img.src.includes('duckduckgo')) {
-                img.src = `https://faviconapi.com/${domain}/64`;
-            } 
-            // Jika FaviconAPI juga gagal, tampilkan Inisial Huruf
-            else {
-                const parent = img.parentElement;
-                parent.innerHTML = `<span>${initial}</span>`;
-            }
+        function getFaviconUrl(link) {
+            try {
+                const domain = new URL(link).hostname;
+                return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+            } catch (e) { return ''; }
         }
 
         function highlightMatch(text, query) {
@@ -246,7 +308,9 @@
 
         function renderList(sites, query = '') {
             const list = document.getElementById('siteList');
-            document.getElementById('countDisplay').innerText = `${sites.length} Website Tersedia`;
+            const countDisplay = document.getElementById('countDisplay');
+            
+            countDisplay.innerText = `${sites.length} Website Tersedia`;
 
             if (sites.length === 0) {
                 list.innerHTML = `<div class="no-result">Tidak ditemukan hasil untuk "${query}"</div>`;
@@ -254,19 +318,21 @@
             }
 
             list.innerHTML = sites.map((site, index) => {
-                const domain = new URL(site.link).hostname;
-                const iconUrl = `https://icons.duckduckgo.com/ip3/${domain}.ico`;
+                const iconUrl = getFaviconUrl(site.link);
+                const nameHighlighted = highlightMatch(site.name, query.trim());
+                // Inisial untuk fallback jika gambar gagal
                 const initial = site.name.charAt(0).toUpperCase();
 
                 return `
-                    <div class="item" style="animation-delay: ${index * 0.02}s">
+                    <div class="item" style="animation-delay: ${index * 0.03}s">
                         <a href="${site.link}" target="_blank" rel="noopener">
                             <div class="item-icon">
                                 <img src="${iconUrl}" 
                                      alt="${site.name}" 
-                                     onerror="handleImageError(this, '${initial}', '${domain}')">
+                                     loading="lazy" 
+                                     onerror="this.parentElement.innerHTML='<span style=\'color:var(--accent-color)\'>${initial}</span>'">
                             </div>
-                            <span class="item-name">${highlightMatch(site.name, query.trim())}</span>
+                            <span class="item-name">${nameHighlighted}</span>
                             <span class="arrow">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                             </span>
@@ -278,18 +344,25 @@
 
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const q = e.target.value.toLowerCase();
-            const filtered = allSites.filter(s => s.name.toLowerCase().includes(q));
+            const filtered = allSites.filter(s => 
+                s.name.toLowerCase().includes(q) || 
+                s.link.toLowerCase().includes(q)
+            );
             renderList(filtered, q);
         });
 
+        // Load Data
         fetch('data.csv')
-            .then(res => res.text())
+            .then(res => {
+                if (!res.ok) throw new Error('File data.csv tidak ditemukan');
+                return res.text();
+            })
             .then(text => {
                 allSites = parseCSV(text);
                 renderList(allSites);
             })
             .catch(err => {
-                document.getElementById('siteList').innerHTML = `<p style="color:#f87171">⚠️ Gagal memuat data</p>`;
+                document.getElementById('siteList').innerHTML = `<p style="color:#f87171">⚠️ Error: ${err.message}</p>`;
             });
     </script>
 </body>
