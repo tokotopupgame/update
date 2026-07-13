@@ -1,0 +1,215 @@
+<!-- Versi 8 - Local Assets & Circular Logo Edition -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toko Topup Game | List Website Topup Game Terpercaya</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0b0f1a;
+            --card-bg: #161b2c;
+            --accent-color: #38bdf8;
+            --text-main: #f1f5f9;
+            --text-dim: #94a3b8;
+            --border-color: #2d364d;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 50% -20%, #1e293b 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, #0f172a 0%, transparent 40%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container { width: 100%; max-width: 540px; text-align: center; }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle { color: var(--text-dim); margin-bottom: 35px; font-size: 1rem; }
+
+        /* Search Box */
+        .search-container { position: sticky; top: 20px; z-index: 100; margin-bottom: 30px; }
+        .search-wrapper { position: relative; border-radius: 16px; }
+        .search-input {
+            width: 100%;
+            background: rgba(22, 27, 44, 0.9);
+            backdrop-filter: blur(8px);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 18px 18px 18px 52px;
+            color: #fff;
+            outline: none;
+            transition: 0.3s;
+        }
+        .search-input:focus { border-color: var(--accent-color); }
+        .search-wrapper svg { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-dim); }
+
+        .stats-info { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 0.85rem; color: var(--text-dim); padding: 0 5px; }
+
+        /* List Items */
+        .list { display: grid; gap: 12px; width: 100%; }
+        .item a {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px; /* Lebih bulat agar serasi dengan logo */
+            padding: 12px 20px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .item a:hover { border-color: var(--accent-color); transform: translateX(5px); background: #1e253d; }
+
+        /* Logo Lingkaran - Fokus Disini */
+        .item-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%; /* Membuat Lingkaran Sempurna */
+            background: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Memotong bagian gambar yang keluar dari lingkaran */
+            border: 2px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .item-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ini kuncinya: Gambar akan memenuhi lingkaran tanpa gepeng */
+            display: block;
+        }
+
+        .item-name { flex: 1; text-align: left; }
+        .arrow { opacity: 0.3; }
+        mark { background: rgba(56, 189, 248, 0.2); color: var(--accent-color); border-radius: 4px; padding: 0 2px; }
+
+        /* Skeleton */
+        .skeleton { height: 74px; background: var(--card-bg); border-radius: 20px; position: relative; overflow: hidden; }
+        .skeleton::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); animation: load 1.5s infinite; }
+        @keyframes load { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Toko Topup Game</h1>
+        <p class="subtitle">Direktori Website Topup Aman & Terpercaya</p>
+
+        <div class="search-container">
+            <div class="search-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" class="search-input" id="searchInput" placeholder="Cari website..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="stats-info">
+            <span id="countDisplay">Memuat data...</span>
+            <span>Update Otomatis</span>
+        </div>
+
+        <div class="list" id="siteList">
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+        </div>
+    </div>
+
+    <script>
+        let allSites = [];
+
+        function parseCSV(text) {
+            const lines = text.trim().split('\n');
+            const data = lines.slice(1).map(line => {
+                const commaIndex = line.indexOf(',');
+                if (commaIndex === -1) return null;
+                const name = line.slice(0, commaIndex).trim();
+                const link = line.slice(commaIndex + 1).trim();
+                return (name && link) ? { name, link } : null;
+            }).filter(Boolean);
+            return data.sort((a, b) => a.name.localeCompare(b.name));
+        }
+
+        // Fungsi mencocokkan nama CSV dengan nama file gambar
+        function getLocalLogo(name) {
+            // Mengubah "Nama Website" menjadi "nama-website.png"
+            const fileName = name.toLowerCase().replace(/\s+/g, '-');
+            return `../assets/logo/${fileName}.png`;
+        }
+
+        function highlightMatch(text, query) {
+            if (!query) return text;
+            const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return text.replace(regex, '<mark>$1</mark>');
+        }
+
+        function renderList(sites, query = '') {
+            const list = document.getElementById('siteList');
+            document.getElementById('countDisplay').innerText = `${sites.length} Website Tersedia`;
+
+            if (sites.length === 0) {
+                list.innerHTML = `<div style="color:var(--text-dim); padding:40px;">Hasil tidak ditemukan...</div>`;
+                return;
+            }
+
+            list.innerHTML = sites.map((site, index) => {
+                const logoPath = getLocalLogo(site.name);
+                const initial = site.name.charAt(0).toUpperCase();
+
+                return `
+                    <div class="item">
+                        <a href="${site.link}" target="_blank">
+                            <div class="item-icon">
+                                <img src="${logoPath}" 
+                                     alt="${site.name}" 
+                                     onerror="this.parentElement.innerHTML='<span style=\'color:var(--accent-color)\'>${initial}</span>'">
+                            </div>
+                            <span class="item-name">${highlightMatch(site.name, query.trim())}</span>
+                            <span class="arrow">→</span>
+                        </a>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const q = e.target.value.toLowerCase();
+            const filtered = allSites.filter(s => s.name.toLowerCase().includes(q));
+            renderList(filtered, q);
+        });
+
+        fetch('data.csv')
+            .then(res => res.text())
+            .then(text => {
+                allSites = parseCSV(text);
+                renderList(allSites);
+            })
+            .catch(err => {
+                document.getElementById('siteList').innerHTML = `<p>Gagal memuat data.</p>`;
+            });
+    </script>
+</body>
+</html>
