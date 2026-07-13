@@ -1,0 +1,249 @@
+<!-- Versi 6 - Professional Directory Edition (No Icon Dependency) -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toko Topup Game | List Website Terpercaya</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #0b0e14;
+            --card: #161b26;
+            --accent: #38bdf8;
+            --text-p: #f8fafc;
+            --text-s: #94a3b8;
+            --border: #262f45;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-p);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 500px;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(to right, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p { color: var(--text-s); font-size: 0.95rem; }
+
+        /* Search Section */
+        .search-container {
+            width: 100%;
+            max-width: 500px;
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            margin-bottom: 25px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(22, 27, 38, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px 20px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+        }
+
+        /* List Styling */
+        .list-container {
+            width: 100%;
+            max-width: 500px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            transition: 0.2s ease-in-out;
+            animation: slideUp 0.4s ease forwards;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+            background: #1c2333;
+        }
+
+        /* Visual Avatar (Solusi Pengganti Icon) */
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #fff;
+            position: relative;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 2;
+        }
+
+        .info { flex: 1; }
+        .info .name {
+            display: block;
+            font-weight: 600;
+            color: var(--text-p);
+            font-size: 1.05rem;
+            margin-bottom: 2px;
+        }
+        .info .status {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            color: #10b981; /* Green color for 'Verified' */
+            font-weight: 500;
+        }
+
+        .arrow-link {
+            color: var(--text-s);
+            opacity: 0.4;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        mark { background: rgba(56, 189, 248, 0.3); color: var(--accent); border-radius: 2px; }
+
+        .no-data { text-align: center; color: var(--text-s); padding: 40px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Topup Game</h1>
+        <p>Kumpulan website topup game terpercaya dan aman hasil kurasi kami.</p>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Cari situs topup..." autocomplete="off">
+    </div>
+
+    <div id="siteList" class="list-container">
+        <!-- Skeleton akan muncul di sini -->
+    </div>
+
+    <script>
+        let allSites = [];
+        // Daftar warna untuk avatar otomatis
+        const colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#6366f1'];
+
+        function getInitialColor(name) {
+            let charCode = name.charCodeAt(0);
+            return colors[charCode % colors.length];
+        }
+
+        function parseCSV(text) {
+            const lines = text.trim().split('\n').slice(1);
+            return lines.map(line => {
+                const parts = line.split(',');
+                if (parts.length < 2) return null;
+                return { name: parts[0].trim(), link: parts[1].trim() };
+            }).filter(Boolean).sort((a, b) => a.name.localeCompare(b.name));
+        }
+
+        function render(sites, query = '') {
+            const container = document.getElementById('siteList');
+            if (sites.length === 0) {
+                container.innerHTML = `<div class="no-data">Tidak ada hasil ditemukan</div>`;
+                return;
+            }
+
+            container.innerHTML = sites.map((site, i) => {
+                const initial = site.name.charAt(0).toUpperCase();
+                const bgColor = getInitialColor(site.name);
+                const domain = new URL(site.link).hostname;
+                const highlightedName = query ? site.name.replace(new RegExp(`(${query})`, 'gi'), '<mark>$1</mark>') : site.name;
+                
+                // Gunakan DuckDuckGo tapi sembunyikan jika error
+                const iconSrc = `https://icons.duckduckgo.com/ip3/${domain}.ico`;
+
+                return `
+                <a href="${site.link}" class="card" target="_blank" style="animation-delay: ${i * 0.05}s">
+                    <div class="avatar" style="background: ${bgColor}">
+                        ${initial}
+                        <img src="${iconSrc}" onerror="this.style.display='none'">
+                    </div>
+                    <div class="info">
+                        <span class="name">${highlightedName}</span>
+                        <div class="status">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                            Verified Seller
+                        </div>
+                    </div>
+                    <div class="arrow-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </div>
+                </a>
+                `;
+            }).join('');
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const q = e.target.value.toLowerCase();
+            const filtered = allSites.filter(s => s.name.toLowerCase().includes(q));
+            render(filtered, q);
+        });
+
+        fetch('data.csv')
+            .then(res => res.text())
+            .then(text => {
+                allSites = parseCSV(text);
+                render(allSites);
+            });
+    </script>
+</body>
+</html>
